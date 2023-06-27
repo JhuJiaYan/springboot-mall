@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -17,7 +18,6 @@ public class ProductController {
 
     /**
      * 查詢商品
-     *
      * @param productId
      * @return
      */
@@ -31,6 +31,15 @@ public class ProductController {
         }
     }
 
+    /**
+     * 查詢商品列表
+     * @return
+     */
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getProducts(){
+        List<Product> productList=productService.getProducts();
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
+    }
 
     /**
      * 新增商品
@@ -67,6 +76,11 @@ public class ProductController {
 
     }
 
+    /**
+     * 刪除商品
+     * @param productId
+     * @return
+     */
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable Integer productId){
         productService.deleteProductById(productId);
