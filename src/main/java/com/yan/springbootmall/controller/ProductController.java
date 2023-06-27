@@ -15,6 +15,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    /**
+     * 查詢商品
+     *
+     * @param productId
+     * @return
+     */
     @GetMapping("/products/{productId}")
     public ResponseEntity<Product> getProduct(@PathVariable Integer productId) {
         Product product = productService.getProductById(productId);
@@ -26,6 +32,12 @@ public class ProductController {
     }
 
 
+    /**
+     * 新增商品
+     *
+     * @param productRequest
+     * @return
+     */
     @PostMapping("/products")
     //@Valid使驗證請求參數註解生效，如@NotNull
     public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductRequest productRequest) {
@@ -33,4 +45,27 @@ public class ProductController {
         Product product = productService.getProductById(productId);//依傳回來的id從資料庫取得剛創建好的商品資了
         return ResponseEntity.status(HttpStatus.CREATED).body(product);//回傳給前端狀態碼與商品資料
     }
+
+    /**
+     * 修改商品
+     *
+     * @return
+     */
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
+                                                 @RequestBody @Valid ProductRequest productRequest) {
+
+        //先查詢商品是否存在
+        Product product = productService.getProductById(productId);
+        if (product == null) {//若不存在
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();//返回不存在404給前端
+        }
+        //若存在就更新商品資料
+        productService.updateProduct(productId, productRequest);//更新商品資料
+        Product updateOK = productService.getProductById(productId);//查詢更新後的商品資料
+        return ResponseEntity.status(HttpStatus.OK).body(updateOK);//將更新後的商品資料返回前端
+
+
+    }
+
 }
