@@ -1,5 +1,6 @@
 package com.yan.springbootmall.controller;
 
+import com.yan.springbootmall.constant.ProductCategory;
 import com.yan.springbootmall.dto.ProductRequest;
 import com.yan.springbootmall.model.Product;
 import com.yan.springbootmall.service.ProductService;
@@ -36,8 +37,12 @@ public class ProductController {
      * @return
      */
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(){
-        List<Product> productList=productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+            //required = false 讓category參數變成可選參數(非必要)
+            @RequestParam(required = false) ProductCategory category,//商品分類
+            @RequestParam(required = false) String search //使用者搜尋關鍵字
+    ){
+        List<Product> productList=productService.getProducts(category,search);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
 
