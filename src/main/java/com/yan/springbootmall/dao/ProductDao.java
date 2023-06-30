@@ -1,6 +1,6 @@
 package com.yan.springbootmall.dao;
 
-import com.yan.springbootmall.constant.ProductCategory;
+import com.yan.springbootmall.dto.ProductQueryParams;
 import com.yan.springbootmall.dto.ProductRequest;
 import com.yan.springbootmall.model.Product;
 
@@ -11,7 +11,8 @@ public interface ProductDao {
 
     Product getProductById(Integer productId);
 
-    List<Product> getProducts(ProductCategory category,String search);
+    //List<Product> getProducts(ProductCategory category,String search);
+    List<Product> getProducts(ProductQueryParams productQueryParams);
 
     Integer createProduct(ProductRequest productRequest);
 

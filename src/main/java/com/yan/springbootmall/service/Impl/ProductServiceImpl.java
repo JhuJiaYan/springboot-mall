@@ -2,6 +2,7 @@ package com.yan.springbootmall.service.Impl;
 
 import com.yan.springbootmall.constant.ProductCategory;
 import com.yan.springbootmall.dao.ProductDao;
+import com.yan.springbootmall.dto.ProductQueryParams;
 import com.yan.springbootmall.dto.ProductRequest;
 import com.yan.springbootmall.model.Product;
 import com.yan.springbootmall.service.ProductService;
@@ -21,9 +22,13 @@ public class ProductServiceImpl implements ProductService {
         return productDao.getProductById(productId);
     }
 
+    //    @Override
+//    public List<Product> getProducts(ProductCategory category ,String search) {
+//        return productDao.getProducts(category,search);
+//    }
     @Override
-    public List<Product> getProducts(ProductCategory category ,String search) {
-        return productDao.getProducts(category,search);
+    public List<Product> getProducts(ProductQueryParams productQueryParams) {
+        return productDao.getProducts(productQueryParams);
     }
 
     @Override
@@ -33,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateProduct(Integer productId, ProductRequest productRequest) {
-        productDao.updateProduct(productId,productRequest);
+        productDao.updateProduct(productId, productRequest);
     }
 
     @Override
