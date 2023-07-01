@@ -5,6 +5,7 @@ import com.yan.springbootmall.dto.ProductQueryParams;
 import com.yan.springbootmall.dto.ProductRequest;
 import com.yan.springbootmall.model.Product;
 import com.yan.springbootmall.service.ProductService;
+import com.yan.springbootmall.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class ProductController {
 
     /**
      * 查詢商品
+     *
      * @param productId
      * @return
      */
@@ -39,10 +41,11 @@ public class ProductController {
 
     /**
      * 查詢商品列表
+     *
      * @return
      */
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
             //查詢條件 Filtering
             //required = false 讓category參數變成可選參數(非必要)
             @RequestParam(required = false) ProductCategory category,//商品分類
@@ -56,8 +59,8 @@ public class ProductController {
             //class開頭上使用@Validated才會讓@Max與@Min生效
             @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,//取得幾筆數據
             @RequestParam(defaultValue = "0") @Min(0) Integer offset //跳過多少筆數據
-    ){
-        ProductQueryParams productQueryParams=new ProductQueryParams();
+    ) {
+        ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
         productQueryParams.setOrderBy(orderBy);
@@ -65,10 +68,20 @@ public class ProductController {
         productQueryParams.setLimit(limit);
         productQueryParams.setOffset(offset);
 
+        //取得product list
         //List<Product> productList=productService.getProducts(category,search);
-        List<Product> productList=productService.getProducts(productQueryParams);
+        List<Product> productList = productService.getProducts(productQueryParams);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        //取得product 總比數
+        Integer total=productService.countProduct(productQueryParams);//計算商品總筆數
+        //分頁
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);//總筆數
+        page.setResults(productList);//要回傳的數據
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     /**
@@ -108,11 +121,12 @@ public class ProductController {
 
     /**
      * 刪除商品
+     *
      * @param productId
      * @return
      */
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId){
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) {
         productService.deleteProductById(productId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

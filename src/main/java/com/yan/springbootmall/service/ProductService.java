@@ -11,12 +11,14 @@ public interface ProductService {
 
     //List<Product> getProducts(ProductCategory category,String search);
     List<Product> getProducts(ProductQueryParams productQueryParams);
+    Integer countProduct(ProductQueryParams productQueryParams);
 
     Integer createProduct(ProductRequest productRequest);
 
     void updateProduct(Integer productId, ProductRequest productRequest);
 
     void deleteProductById(Integer productId);
+
 
 
 }
