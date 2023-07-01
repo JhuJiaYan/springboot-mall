@@ -68,14 +68,17 @@ public class ProductDaoImpl implements ProductDao {
         Map<String, Object> map = new HashMap<>();
 
         //查詢條件
-        if (productQueryParams.getCategory() != null) {
-            sql = sql + " AND category= :category";//AND前要留一個空白格，防止拼接時與前一個條件黏在一起
-            map.put("category", productQueryParams.getCategory().name());
-        }
-        if (productQueryParams.getSearch() != null) {
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + productQueryParams.getSearch() + "%");
-        }
+//        if (productQueryParams.getCategory() != null) {
+//            sql = sql + " AND category= :category";//AND前要留一個空白格，防止拼接時與前一個條件黏在一起
+//            map.put("category", productQueryParams.getCategory().name());
+//        }
+//        if (productQueryParams.getSearch() != null) {
+//            sql = sql + " AND product_name LIKE :search";
+//            map.put("search", "%" + productQueryParams.getSearch() + "%");
+//        }
+
+        //使用提煉重複程式addFilteringSql
+        sql=addFilteringSql(sql,map,productQueryParams);
 
         //設定排序方式的sql
         sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
@@ -98,6 +101,25 @@ public class ProductDaoImpl implements ProductDao {
         Map<String, Object> map = new HashMap<>();
 
         //查詢條件
+//        if (productQueryParams.getCategory() != null) {
+//            sql = sql + " AND category= :category";//AND前要留一個空白格，防止拼接時與前一個條件黏在一起
+//            map.put("category", productQueryParams.getCategory().name());
+//        }
+//        if (productQueryParams.getSearch() != null) {
+//            sql = sql + " AND product_name LIKE :search";
+//            map.put("search", "%" + productQueryParams.getSearch() + "%");
+//        }
+
+        //使用提煉重複程式addFilteringSql
+        sql=addFilteringSql(sql,map,productQueryParams);
+
+        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
+        return total;
+    }
+
+    //提煉重複程式addFilteringSql
+    private String addFilteringSql(String sql,Map<String,Object> map,ProductQueryParams productQueryParams){
+        //查詢條件
         if (productQueryParams.getCategory() != null) {
             sql = sql + " AND category= :category";//AND前要留一個空白格，防止拼接時與前一個條件黏在一起
             map.put("category", productQueryParams.getCategory().name());
@@ -106,9 +128,9 @@ public class ProductDaoImpl implements ProductDao {
             sql = sql + " AND product_name LIKE :search";
             map.put("search", "%" + productQueryParams.getSearch() + "%");
         }
-        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
-        return total;
+        return sql;
     }
+
 
     @Override
     public Integer createProduct(ProductRequest productRequest) {
