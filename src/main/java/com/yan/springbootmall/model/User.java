@@ -1,11 +1,18 @@
 package com.yan.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class User {
 
     private Integer user_id;
+
+    @JsonProperty("e_mail")//SpringBoot將Object轉換為Json回傳，key原本是"email"就會變成"e_mail"
     private String email;
+
+    @JsonIgnore//SpringBoot將Object轉換為Json時會忽略此參數
     private String password;
     private Date created_date;
     private Date last_modified_date;
