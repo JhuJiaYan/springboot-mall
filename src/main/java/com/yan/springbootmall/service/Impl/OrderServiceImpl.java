@@ -4,6 +4,7 @@ import com.yan.springbootmall.dao.OrderDao;
 import com.yan.springbootmall.dao.ProductDao;
 import com.yan.springbootmall.dto.BuyItem;
 import com.yan.springbootmall.dto.CreateOrderRequest;
+import com.yan.springbootmall.model.Order;
 import com.yan.springbootmall.model.OrderItem;
 import com.yan.springbootmall.model.Product;
 import com.yan.springbootmall.service.OrderService;
@@ -39,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
             //轉換 BuyItem to OrderItem
             OrderItem orderItem = new OrderItem();
-            orderItem.setProduct_id(buyItem.getProductId());
+            orderItem.setProductId(buyItem.getProductId());
             orderItem.setQuantity(buyItem.getQuantity());
             orderItem.setAmount(amount);
 
@@ -50,8 +51,14 @@ public class OrderServiceImpl implements OrderService {
         Integer orderId = orderDao.createOrder(userId, totalAmount);
         //創建訂單(細項清單)
         orderDao.createOrderItems(orderId, orderItemList);
-
-
         return orderId;
+    }
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);//取得主表數據
+        List<OrderItem> orderItemList = orderDao.getOrderItemByOrderId(orderId);//取得細項List數據
+        order.setOrderItemList(orderItemList);//將細項List數據加入到主表中
+        return order;
     }
 }

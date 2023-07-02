@@ -2,34 +2,36 @@ package com.yan.springbootmall.model;
 
 public class OrderItem {
 
-    private Integer order_item_id;
-    private Integer order_id;
-    private Integer product_id;
+    private Integer orderItemId;
+    private Integer orderId;
+    private Integer productId;
     private Integer quantity;
     private Integer amount;
+    private String productName;
+    private String imageUrl;
 
-    public Integer getOrder_item_id() {
-        return order_item_id;
+    public Integer getOrderItemId() {
+        return orderItemId;
     }
 
-    public void setOrder_item_id(Integer order_item_id) {
-        this.order_item_id = order_item_id;
+    public void setOrderItemId(Integer orderItemId) {
+        this.orderItemId = orderItemId;
     }
 
-    public Integer getOrder_id() {
-        return order_id;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(Integer order_id) {
-        this.order_id = order_id;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
-    public Integer getProduct_id() {
-        return product_id;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setProduct_id(Integer product_id) {
-        this.product_id = product_id;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public Integer getQuantity() {
@@ -46,5 +48,21 @@ public class OrderItem {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
