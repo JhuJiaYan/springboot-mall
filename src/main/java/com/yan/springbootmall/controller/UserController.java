@@ -1,5 +1,6 @@
 package com.yan.springbootmall.controller;
 
+import com.yan.springbootmall.dto.UserLoginRequest;
 import com.yan.springbootmall.dto.UserRegisterRequest;
 import com.yan.springbootmall.model.User;
 import com.yan.springbootmall.service.UserService;
@@ -22,8 +23,15 @@ public class UserController {
     public ResponseEntity<User> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
 
         Integer userId = userService.register(userRegisterRequest);//註冊
-        User user=userService.getUserById(userId);//查詢User
+        User user = userService.getUserById(userId);//查詢User
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    //用戶登入
+    @PostMapping("/users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
+        User user = userService.login(userLoginRequest);//登入
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
 
