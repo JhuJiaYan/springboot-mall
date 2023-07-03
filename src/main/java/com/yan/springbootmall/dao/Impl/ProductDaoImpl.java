@@ -78,7 +78,7 @@ public class ProductDaoImpl implements ProductDao {
 //        }
 
         //使用提煉重複程式addFilteringSql
-        sql=addFilteringSql(sql,map,productQueryParams);
+        sql = addFilteringSql(sql, map, productQueryParams);
 
         //設定排序方式的sql
         sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
@@ -111,14 +111,14 @@ public class ProductDaoImpl implements ProductDao {
 //        }
 
         //使用提煉重複程式addFilteringSql
-        sql=addFilteringSql(sql,map,productQueryParams);
+        sql = addFilteringSql(sql, map, productQueryParams);
 
         Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
         return total;
     }
 
     //提煉重複程式addFilteringSql
-    private String addFilteringSql(String sql,Map<String,Object> map,ProductQueryParams productQueryParams){
+    private String addFilteringSql(String sql, Map<String, Object> map, ProductQueryParams productQueryParams) {
         //查詢條件
         if (productQueryParams.getCategory() != null) {
             sql = sql + " AND category= :category";//AND前要留一個空白格，防止拼接時與前一個條件黏在一起
@@ -191,5 +191,16 @@ public class ProductDaoImpl implements ProductDao {
         map.put("productId", productId);
         namedParameterJdbcTemplate.update(sql, map);
 
+    }
+
+    @Override
+    public void updateStock(Integer productId, Integer stock) {
+        String sql = "UPDATE product SET stock=:stock, last_modified_date = :lastModifiedDate " +
+                "WHERE product_id=:productId ";
+        Map<String, Object> map = new HashMap<>();
+        map.put("productId", productId);
+        map.put("stock", stock);
+        map.put("lastModifiedDate", new Date());
+        namedParameterJdbcTemplate.update(sql, map);
     }
 }
