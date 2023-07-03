@@ -5,6 +5,7 @@ import com.yan.springbootmall.dao.ProductDao;
 import com.yan.springbootmall.dao.UserDao;
 import com.yan.springbootmall.dto.BuyItem;
 import com.yan.springbootmall.dto.CreateOrderRequest;
+import com.yan.springbootmall.dto.OrderQueryParams;
 import com.yan.springbootmall.model.Order;
 import com.yan.springbootmall.model.OrderItem;
 import com.yan.springbootmall.model.Product;
@@ -89,5 +90,20 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItemList = orderDao.getOrderItemByOrderId(orderId);//取得細項List數據
         order.setOrderItemList(orderItemList);//將細項List數據加入到主表中
         return order;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList=orderDao.getOrders(orderQueryParams);
+        for(Order order :orderList){
+            List<OrderItem> orderItemList=orderDao.getOrderItemByOrderId(order.getOrderId());
+            order.setOrderItemList(orderItemList);
+        }
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
     }
 }
